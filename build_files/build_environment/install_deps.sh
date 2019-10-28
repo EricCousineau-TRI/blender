@@ -309,7 +309,10 @@ ARGUMENTS_INFO="\"COMMAND LINE ARGUMENTS:
 
 DO_SHOW_DEPS=false
 
-SUDO="sudo"
+# N.B. Use `fake-sudo` because logic below checks for [ ! $SUDO ], which is not
+# (really) necessary for a docker build.
+fake-sudo() { "$@"; }
+SUDO="fake-sudo"
 
 NO_BUILD=false
 NO_CONFIRM=false
@@ -317,8 +320,8 @@ USE_CXX11=true
 
 CLANG_FORMAT_VERSION_MIN="6.0"
 
-PYTHON_VERSION="3.7.4"
-PYTHON_VERSION_MIN="3.7"
+PYTHON_VERSION="3.6.8"
+PYTHON_VERSION_MIN="3.6"
 PYTHON_FORCE_BUILD=false
 PYTHON_FORCE_REBUILD=false
 PYTHON_SKIP=false
@@ -775,6 +778,8 @@ while true; do
     ;;
   esac
 done
+
+set -x
 
 if [ "$WITH_ALL" = true -a "$OPENCOLLADA_SKIP" = false ]; then
   WITH_OPENCOLLADA=true

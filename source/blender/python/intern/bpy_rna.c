@@ -8543,6 +8543,54 @@ void pyrna_free_types(void)
   RNA_PROP_END;
 }
 
+/**
+ * Backport to Python 3.6: This definition was taken from Python 3.7's source
+ * code. It seems to work for our purposes.
+ */
+int
+_PyObject_LookupAttr(PyObject *v, PyObject *name, PyObject **result)
+{
+    PyTypeObject *tp = Py_TYPE(v);
+
+    if (!PyUnicode_Check(name)) {
+        PyErr_Format(PyExc_TypeError,
+                     "attribute name must be string, not '%.200s'",
+                     name->ob_type->tp_name);
+        *result = NULL;
+        return -1;
+    }
+
+    if (tp->tp_getattro == PyObject_GenericGetAttr) {
+        *result = _PyObject_GenericGetAttrWithDict(v, name, NULL);
+        if (*result != NULL) {
+            return 1;
+        }
+        if (PyErr_Occurred()) {
+            return -1;
+        }
+        return 0;
+    }
+    if (tp->tp_getattro != NULL) {
+        *result = (*tp->tp_getattro)(v, name);
+    }
+    else if (tp->tp_getattr != NULL) {
+        const char *name_str = PyUnicode_AsUTF8(name);
+        if (name_str == NULL) {
+            *result = NULL;
+            return -1;
+        }
+        *result = (*tp->tp_getattr)(v, (char *)name_str);
+    }
+    if (*result != NULL) {
+        return 1;
+    }
+    if (!PyErr_ExceptionMatches(PyExc_AttributeError)) {
+        return -1;
+    }
+    PyErr_Clear();
+    return 0;
+}
+
 /* Note! MemLeak XXX
  *
  * There is currently a bug where moving the registration of a Python class does
