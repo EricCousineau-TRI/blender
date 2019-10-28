@@ -1,3 +1,6 @@
+#!/bin/bash
+set -eux -o pipefail
+
 deps_install_dir=${PWD}/../blender-deps/install
 build_dir=${PWD}/../build_linux
 cmake -H${PWD} -B${build_dir} \
@@ -23,6 +26,11 @@ cmake -H${PWD} -B${build_dir} \
 -DALEMBIC_ROOT_DIR=${deps_install_dir}/alembic
 -DWITH_CODEC_FFMPEG=ON
 -DFFMPEG_LIBRARIES='avformat;avcodec;avutil;avdevice;swscale;swresample;lzma;rt;theora;theoradec;theoraenc;vorbis;vorbisenc;vorbisfile;ogg;x264;openjp2'
+
+-DWITH_PYTHON_INSTALL=OFF
+-DWITH_PYTHON_INSTALL_NUMPY=OFF
+-DWITH_PYTHON_INSTALL_REQUESTS=OFF
+-DWITH_PYTHON_MODULE=ON
 ")
 
 # -DWITH_BULLET=OFF
@@ -35,9 +43,5 @@ cmake -H${PWD} -B${build_dir} \
 # -DWITH_IMAGE_DDS=OFF
 # -DWITH_INSTALL_PORTABLE=OFF
 # -DWITH_INTERNATIONAL=OFF
-# -DWITH_PYTHON_INSTALL=OFF
-# -DWITH_PYTHON_INSTALL_NUMPY=OFF
-# -DWITH_PYTHON_INSTALL_REQUESTS=OFF
-# -DWITH_PYTHON_MODULE=ON
 # -DWITH_SDL=OFF
 # -DWITH_SYSTEM_EIGEN3=ON
