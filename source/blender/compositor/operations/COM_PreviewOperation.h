@@ -45,8 +45,7 @@ class PreviewOperation : public NodeOperation {
 
   bool isOutputOperation(bool /*rendering*/) const
   {
-    // return !G.background;
-    return true;
+    return !G.background;
   }
   void initExecution();
   void deinitExecution();

@@ -1,0 +1,47 @@
+#!/bin/bash
+set -eux -o pipefail
+
+deps_install_dir=${PWD}/../blender-deps/install
+build_dir=${PWD}/../build_linux
+cmake -H${PWD} -B${build_dir} \
+  $(echo "
+-DWITH_CODEC_SNDFILE=ON
+-DCMAKE_INSTALL_PREFIX=${build_dir}/bin
+-DPYTHON_SITE_PACKAGES=${build_dir}/bin/lib/python3.7/site-packages
+-DWITH_OPENCOLORIO=ON
+-DOPENCOLORIO_ROOT_DIR=${deps_install_dir}/ocio
+-DWITH_OPENIMAGEIO=ON
+-DOPENIMAGEIO_ROOT_DIR=${deps_install_dir}/oiio
+-DWITH_CYCLES_OSL=ON
+-DWITH_LLVM=ON
+-DLLVM_VERSION=6.0
+-DOSL_ROOT_DIR=${deps_install_dir}/osl
+-DWITH_OPENSUBDIV=ON
+-DOPENSUBDIV_ROOT_DIR=${deps_install_dir}/osd
+-DWITH_OPENVDB=ON
+-DWITH_OPENVDB_BLOSC=ON
+-DOPENVDB_ROOT_DIR=${deps_install_dir}/openvdb
+-DBLOSC_ROOT_DIR=${deps_install_dir}/blosc
+-DWITH_ALEMBIC=ON
+-DALEMBIC_ROOT_DIR=${deps_install_dir}/alembic
+-DWITH_CODEC_FFMPEG=ON
+-DFFMPEG_LIBRARIES='avformat;avcodec;avutil;avdevice;swscale;swresample;lzma;rt;theora;theoradec;theoraenc;vorbis;vorbisenc;vorbisfile;ogg;x264;openjp2'
+
+-DWITH_PYTHON_INSTALL=OFF
+-DWITH_PYTHON_INSTALL_NUMPY=OFF
+-DWITH_PYTHON_INSTALL_REQUESTS=OFF
+-DWITH_PYTHON_MODULE=ON
+")
+
+# -DWITH_BULLET=OFF
+# -DWITH_CODEC_AVI=OFF
+# -DWITH_CYCLES=ON
+# -DWITH_DRACO=OFF
+# -DWITH_IK_ITASC=OFF
+# -DWITH_IK_SOLVER=OFF
+# -DWITH_IMAGE_CINEON=OFF
+# -DWITH_IMAGE_DDS=OFF
+# -DWITH_INSTALL_PORTABLE=OFF
+# -DWITH_INTERNATIONAL=OFF
+# -DWITH_SDL=OFF
+# -DWITH_SYSTEM_EIGEN3=ON
