@@ -3,11 +3,12 @@ set -eux -o pipefail
 
 deps_install_dir=${PWD}/../blender-deps/install
 build_dir=${PWD}/../build_linux
+install_dir=${PWD}/../build_linux/install
 cmake -H${PWD} -B${build_dir} \
   $(echo "
 -DWITH_CODEC_SNDFILE=ON
--DCMAKE_INSTALL_PREFIX=${build_dir}/bin
--DPYTHON_SITE_PACKAGES=${build_dir}/bin/lib/python3.7/site-packages
+-DCMAKE_INSTALL_PREFIX=${install_dir}
+-DPYTHON_SITE_PACKAGES=${install_dir}/lib/python3.6/site-packages
 -DWITH_OPENCOLORIO=ON
 -DOPENCOLORIO_ROOT_DIR=${deps_install_dir}/ocio
 -DWITH_OPENIMAGEIO=ON
@@ -26,11 +27,11 @@ cmake -H${PWD} -B${build_dir} \
 -DALEMBIC_ROOT_DIR=${deps_install_dir}/alembic
 -DWITH_CODEC_FFMPEG=ON
 -DFFMPEG_LIBRARIES='avformat;avcodec;avutil;avdevice;swscale;swresample;lzma;rt;theora;theoradec;theoraenc;vorbis;vorbisenc;vorbisfile;ogg;x264;openjp2'
-
 -DWITH_PYTHON_INSTALL=OFF
 -DWITH_PYTHON_INSTALL_NUMPY=OFF
 -DWITH_PYTHON_INSTALL_REQUESTS=OFF
--DWITH_PYTHON_MODULE=ON
+-DWITH_PYTHON_MODULE=OFF
+-DPYTHON_VERSION=3.6
 ")
 
 # -DWITH_BULLET=OFF
